@@ -34,6 +34,20 @@ public class List<T>
         LastValueIdx++;
     }
 
+    public void Remove(uint idx)
+    {
+        for (;idx < LastValueIdx;idx++)
+        {
+            Data[idx] = Data[idx + 1];
+        }
+
+        Data[LastValueIdx] = default;
+        LastValueIdx--;
+
+        if (LastValueIdx + 1 < Data.Length / 2)
+            ResizeData(false);
+    }
+
     private void ResizeData(bool bigger)
     {
         if (bigger)
@@ -41,6 +55,12 @@ public class List<T>
             T?[] DataTemp = Data;
             Data = new T?[Data.Length == 0 ? 1 : Data.Length * 2];
             Array.Copy(DataTemp, Data, DataTemp.Length);
+        }
+        else if(!bigger)
+        {
+            T?[] DataTemp = Data;
+            Data = new T?[Data.Length <= 1 ? 0 : Data.Length / 2];
+            Array.Copy(DataTemp, Data, Data.Length);
         }
     }
 
@@ -56,7 +76,7 @@ public class List<T>
             Console.WriteLine("--------------");
             for (int i = 0; i < LastValueIdx + 1; i++)
             {
-                Console.WriteLine(Data[i]);
+                Console.WriteLine($"Idx: {i}\tValue: {Data[i]}");
             }
         }
 
